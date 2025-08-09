@@ -20,7 +20,6 @@ macro_rules! derive_hash_fast_bytemuck {
 mod tests {
     use super::*;
     use bytemuck::NoUninit;
-    use std::hash::{DefaultHasher, Hash, Hasher};
 
     #[repr(C)]
     #[derive(Clone, Copy, NoUninit)]
@@ -33,6 +32,7 @@ mod tests {
     derive_hash_fast_bytemuck!(FooB);
 
     fn hash_struct_bytemuck(val: FooB) -> u64 {
+        use std::hash::{DefaultHasher, Hash, Hasher};
         let mut hasher = DefaultHasher::new();
         val.hash(&mut hasher);
         hasher.finish()
