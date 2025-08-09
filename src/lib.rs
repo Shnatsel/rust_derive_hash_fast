@@ -52,8 +52,10 @@ mod tests {
         };
 
         let hash_1 = hash_struct_bytemuck(test_struct_1);
+        let hash_1_again = hash_struct_bytemuck(test_struct_1);
         let hash_2 = hash_struct_bytemuck(test_struct_2);
 
+        assert_eq!(hash_1, hash_1_again);
         assert_ne!(hash_1, hash_2);
     }
 }
