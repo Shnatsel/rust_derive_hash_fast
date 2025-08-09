@@ -6,4 +6,4 @@ description = "A faster replacement for `#[derive(Hash)]` for `Copy` types"
 
 [dev-dependencies]
 bytemuck = { version = "1.23.0", features = ["derive"] }
-zerocopy = { version = "0.8.26" }
+zerocopy = { version = "0.8.26", features = ["derive"] }
