@@ -1,0 +1,9 @@
+[package]
+name = "derive_hash_fast"
+version = "0.1.0"
+edition = "2024"
+description = "A faster replacement for `#[derive(Hash)]` for `Copy` types"
+
+[dependencies]
+bytemuck = { version = "1.23.0", features = ["derive"] }
+zerocopy = { version = "0.8.26" }
