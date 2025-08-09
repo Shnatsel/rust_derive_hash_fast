@@ -24,12 +24,12 @@ macro_rules! derive_hash_fast_zerocopy {
                 state.write(::zerocopy::IntoBytes::as_bytes(self));
             }
 
-            // fn hash_slice<H: core::hash::Hasher>(data: &[Self], state: &mut H)
-            // where
-            //     Self: Sized,
-            // {
-            //     state.write(bytemuck::cast_slice(data));
-            // }
+            fn hash_slice<H: core::hash::Hasher>(data: &[Self], state: &mut H)
+            where
+                Self: Sized,
+            {
+                state.write(::zerocopy::transmute_ref!(data));
+            }
         }
     };
 }
