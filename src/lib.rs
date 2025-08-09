@@ -76,7 +76,6 @@ mod tests {
         assert_ne!(hash_1, hash_2);
     }
 
-    #[repr(C)]
     #[derive(Clone, Copy, zerocopy::Immutable, zerocopy::IntoBytes)]
     struct FooZ {
         a: u16,
