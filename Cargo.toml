@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2024"
 description = "A faster replacement for `#[derive(Hash)]` for `Copy` types"
 authors = ["Sergey \"Shnatsel\" Davidoff <shnatsel@gmail.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Shnatsel/rust_derive_hash_fast.git"
 categories = ["rust-patterns", "no-std::no-alloc"]
 keywords = ["hash", "hasher", "derive", "fast"]
 
