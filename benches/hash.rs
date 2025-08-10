@@ -4,7 +4,7 @@ use derive_hash_fast::*;
 use std::hint::black_box;
 use std::hash::{DefaultHasher, Hash, Hasher};
 
-criterion_group!(benches, bench_compound_struct_64, bench_compound_struct_80, bench_compound_struct_128, bench_vec_of_compound_structs);
+criterion_group!(benches, bench_compound_struct_64, bench_compound_struct_80, bench_compound_struct_128, bench_compound_struct_160, bench_slice_of_compound_structs, bench_slice_of_u8_newtype);
 criterion_main!(benches);
 
 fn hash_it(value: impl Hash, mut hasher: impl Hasher) -> u64 {
@@ -73,7 +73,25 @@ pub fn bench_compound_struct_128_with_hasher(c: &mut Criterion, hasher: impl Has
     );
 }
 
-pub fn bench_vec_of_compound_structs(c: &mut Criterion) {
+pub fn bench_compound_struct_160(c: &mut Criterion) {
+    bench_compound_struct_160_with_hasher(c, DefaultHasher::default(), "std::hash::DefaultHasher");
+    bench_compound_struct_160_with_hasher(c, rustc_hash::FxHasher::default(), "rustc_hash::FxHasher");
+    bench_compound_struct_160_with_hasher(c, rapidhash::RapidHasher::default(), "rapidhash::RapidHasher");
+    bench_compound_struct_160_with_hasher(c, ahash::AHasher::default(), "ahash::AHasher");
+    bench_compound_struct_160_with_hasher(c, xxhash_rust::xxh3::Xxh3Default::default(), "xxh3::Xxh3Default");
+}
+
+
+pub fn bench_compound_struct_160_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
+    bench_structs_with_hasher(c, 
+        Compound160Derive {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with [derive(Hash)]", 
+        Compound160FastB {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with derive_hash_fast_bytemuck", 
+        Compound160FastZ {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with derive_hash_fast_zerocopy",
+        hasher, hasher_name
+    );
+}
+
+pub fn bench_slice_of_compound_structs(c: &mut Criterion) {
     bench_slice_of_compound_structs_with_hasher(c, DefaultHasher::default(), "std::hash::DefaultHasher");
     bench_slice_of_compound_structs_with_hasher(c, rustc_hash::FxHasher::default(), "rustc_hash::FxHasher");
     bench_slice_of_compound_structs_with_hasher(c, rapidhash::RapidHasher::default(), "rapidhash::RapidHasher");
@@ -90,7 +108,15 @@ pub fn bench_slice_of_compound_structs_with_hasher(c: &mut Criterion, hasher: im
     );
 }
 
-pub fn bench_slice_of_compound_u8_newtype_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
+pub fn bench_slice_of_u8_newtype(c: &mut Criterion) {
+    bench_slice_of_u8_newtype_with_hasher(c, DefaultHasher::default(), "std::hash::DefaultHasher");
+    bench_slice_of_u8_newtype_with_hasher(c, rustc_hash::FxHasher::default(), "rustc_hash::FxHasher");
+    bench_slice_of_u8_newtype_with_hasher(c, rapidhash::RapidHasher::default(), "rapidhash::RapidHasher");
+    bench_slice_of_u8_newtype_with_hasher(c, ahash::AHasher::default(), "ahash::AHasher");
+    bench_slice_of_u8_newtype_with_hasher(c, xxhash_rust::xxh3::Xxh3Default::default(), "xxh3::Xxh3Default");
+}
+
+pub fn bench_slice_of_u8_newtype_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
     bench_structs_with_hasher(c, 
         vec![U8NewtypeDerive(5); 1024].as_slice(), "Slice of Newtype(u8) with [derive(Hash)]", 
         vec![U8NewtypeFastB(5); 1024].as_slice(), "Slice of Newtype(u8) with derive_hash_fast_bytemuck", 
@@ -202,6 +228,39 @@ struct Compound128FastZ{
 }
 
 derive_hash_fast_zerocopy!(Compound128FastZ);
+
+#[derive(Hash, Clone)]
+struct Compound160Derive{
+    a: u32,
+    b: u32,
+    c: u32,
+    d: u32,
+    e: u32,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone, bytemuck::NoUninit)]
+struct Compound160FastB{
+    a: u32,
+    b: u32,
+    c: u32,
+    d: u32,
+    e: u32,
+}
+
+derive_hash_fast_bytemuck!(Compound160FastB);
+
+
+#[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes)]
+struct Compound160FastZ{
+    a: u32,
+    b: u32,
+    c: u32,
+    d: u32,
+    e: u32,
+}
+
+derive_hash_fast_zerocopy!(Compound160FastZ);
 
 #[derive(Clone, Hash)]
 struct U8NewtypeDerive(u8);
