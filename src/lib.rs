@@ -6,11 +6,11 @@ macro_rules! derive_hash_fast_bytemuck {
                 // Dispatch to a specialized hashing function for the struct's size, if one is available.
                 // This match incurs no runtime overhead in release mode because it matches on a constant.
                 match core::mem::size_of::<$T>() {
-                    1 => state.write_u8(*::bytemuck::cast_ref(self)),
-                    2 => state.write_u16(*::bytemuck::cast_ref(self)),
-                    4 => state.write_u32(*::bytemuck::cast_ref(self)),
-                    8 => state.write_u64(*::bytemuck::cast_ref(self)),
-                    16 => state.write_u128(*::bytemuck::cast_ref(self)),
+                    1 => state.write_u8(::bytemuck::cast(*self)),
+                    2 => state.write_u16(::bytemuck::cast(*self)),
+                    4 => state.write_u32(::bytemuck::cast(*self)),
+                    8 => state.write_u64(::bytemuck::cast(*self)),
+                    16 => state.write_u128(::bytemuck::cast(*self)),
                     _ => state.write(::bytemuck::bytes_of(self)),
                 }
             }
