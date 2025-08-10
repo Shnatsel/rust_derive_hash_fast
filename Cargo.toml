@@ -1,7 +1,7 @@
 [package]
 name = "derive_hash_fast"
-version = "0.1.0"
-edition = "2024"
+version = "0.1.1"
+edition = "2021"
 description = "A faster replacement for `#[derive(Hash)]` for types without padding"
 authors = ["Sergey \"Shnatsel\" Davidoff <shnatsel@gmail.com>"]
 license = "MIT OR Apache-2.0"
