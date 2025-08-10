@@ -86,7 +86,7 @@ mod tests {
         assert_ne!(hash_1, hash_2);
     }
 
-    #[derive(Clone, Copy, zerocopy::Immutable, zerocopy::IntoBytes)]
+    #[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes)]
     struct FooZ {
         a: u16,
         b: u16,
@@ -115,7 +115,7 @@ mod tests {
             c: 'a',
         };
 
-        let hash_1 = hash_struct_zerocopy(test_struct_1);
+        let hash_1 = hash_struct_zerocopy(test_struct_1.clone());
         let hash_1_again = hash_struct_zerocopy(test_struct_1);
         let hash_2 = hash_struct_zerocopy(test_struct_2);
 

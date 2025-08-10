@@ -2,7 +2,7 @@
 name = "derive_hash_fast"
 version = "0.1.0"
 edition = "2024"
-description = "A faster replacement for `#[derive(Hash)]` for `Copy` types"
+description = "A faster replacement for `#[derive(Hash)]` for types without padding"
 authors = ["Sergey \"Shnatsel\" Davidoff <shnatsel@gmail.com>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/Shnatsel/rust_derive_hash_fast.git"
