@@ -10,5 +10,16 @@ categories = ["rust-patterns", "no-std::no-alloc"]
 keywords = ["hash", "hasher", "derive", "fast"]
 
 [dev-dependencies]
+# for tests
 bytemuck = { version = "1.23.0", features = ["derive"] }
 zerocopy = { version = "0.8.26", features = ["derive"] }
+# for benchmarks
+ahash = { version = "0.8.11", features = ["std"]}
+rapidhash = "1.4.0"
+rustc-hash = "2.1.1"
+xxhash-rust = { version = "0.8.15", features = ["xxh3"] }
+criterion = { version = "0.7.0", default-features = false, features = ["cargo_bench_support", "plotters"] }
+
+[[bench]]
+name = "hash"
+harness = false
