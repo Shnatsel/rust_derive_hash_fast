@@ -31,7 +31,17 @@ macro_rules! derive_hash_fast_zerocopy {
     ($T:ty) => {
         impl core::hash::Hash for $T {
             fn hash<H: core::hash::Hasher>(&self, state: &mut H) {
-                state.write(::zerocopy::IntoBytes::as_bytes(self));
+                let bytes = ::zerocopy::IntoBytes::as_bytes(self);
+                // Dispatch to a specialized hashing function for the struct's size, if one is available.
+                // This match incurs no runtime overhead in release mode because it matches on a constant.
+                match bytes.len() {
+                    1 => state.write_u8(u8::from_ne_bytes(bytes.try_into().unwrap())),
+                    2 => state.write_u16(u16::from_ne_bytes(bytes.try_into().unwrap())),
+                    4 => state.write_u32(u32::from_ne_bytes(bytes.try_into().unwrap())),
+                    8 => state.write_u64(u64::from_ne_bytes(bytes.try_into().unwrap())),
+                    16 => state.write_u128(u128::from_ne_bytes(bytes.try_into().unwrap())),
+                    _ => state.write(bytes),
+                }
             }
 
             fn hash_slice<H: core::hash::Hasher>(data: &[Self], state: &mut H)
