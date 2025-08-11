@@ -53,6 +53,7 @@ pub fn write_to_optimal_hasher_function<const B: usize>(bytes: &[u8], state: &mu
         8 => state.write_u64(u64::from_ne_bytes(bytes.try_into().unwrap())),
         9..=15 => state.write_u128(pad_to_u128::<B>(bytes.try_into().unwrap())),
         16 => state.write_u128(u128::from_ne_bytes(bytes.try_into().unwrap())),
+        17..=64 => hash_padded_large::<B>(bytes.try_into().unwrap(), state),
         // TODO: const generic optimiation to lower into several u128 writes with the final one padded
         _ => state.write(bytes),
     }
@@ -77,6 +78,21 @@ fn pad_to_u128<const N: usize>(bytes: &[u8; N]) -> u128 {
     let mut padded_bytes = [0u8; core::mem::size_of::<u128>()];
     padded_bytes[..N].copy_from_slice(bytes);
     u128::from_ne_bytes(padded_bytes.try_into().unwrap())
+}
+
+#[inline]
+fn hash_padded_large<const N: usize>(bytes: &[u8; N], state: &mut impl Hasher) {
+    const SIZEOF_U128: usize = core::mem::size_of::<u128>();
+    let chunks_iter = bytes.chunks_exact(SIZEOF_U128);
+    let remainder = chunks_iter.remainder();
+    for chunk in chunks_iter {
+        state.write_u128(u128::from_ne_bytes(chunk.try_into().unwrap()))
+    }
+    if ! remainder.is_empty() {
+        let mut padded_bytes = [0u8; core::mem::size_of::<u128>()];
+        padded_bytes[..remainder.len()].copy_from_slice(remainder);
+        state.write_u128(u128::from_ne_bytes(padded_bytes.try_into().unwrap()))
+    }
 }
 
 #[cfg(test)]
