@@ -16,9 +16,9 @@ We achieve better performance than `#[derive(Hash)]` by:
 
 ## Usage
 
-For using the crate with `zerocopy` (recommended), see the docs on `derive_hash_fast_zerocopy!`
+For using the crate with `zerocopy` (recommended), see [the docs on `derive_hash_fast_zerocopy!`](https://docs.rs/derive_hash_fast/latest/derive_hash_fast/macro.derive_hash_fast_zerocopy.html)
 
-For using the crate with `bytemuck` (which puts more restrictions on your type), see the docs on `derive_hash_fast_bytemuck!`
+For using the crate with `bytemuck` (which puts more restrictions on your type), see [the docs on `derive_hash_fast_bytemuck!`](https://docs.rs/derive_hash_fast/latest/derive_hash_fast/macro.derive_hash_fast_bytemuck.html)
 
 ## Benchmarks
 
