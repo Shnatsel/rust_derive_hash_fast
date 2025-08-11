@@ -12,7 +12,7 @@ We achieve better performance by:
 
 1. Hashing the entire struct at once (as opposed to each field individually)
 1. Dispatching to a sequence of primitive writes such as `hasher.write_u64` which is determined at compile time, padded where necessary (as opposed to using the slow variable-length codepath in the hashers)
-1. Replicating the optimization `std` performs for `u8` and other primitive types in slices for custom structs, so that e.g. `&[MyType(u8)]` can he hashed as fast as `&[u8]`. This applies to structs with multiple fields as well.
+1. Replicating the optimization `std` performs for `u8` and other primitive types in slices, so that e.g. `&[MyType(u8)]` can he hashed as fast as `&[u8]`. This applies to structs with multiple fields as well.
 
 ## Usage
 
