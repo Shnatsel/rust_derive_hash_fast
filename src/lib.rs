@@ -1,3 +1,5 @@
+#![cfg_attr(not(test), no_std)]
+
 /// Derives a fast `Hash` implementation for `bytemuck` types.
 ///
 /// This macro implements [std::hash::Hash] by calling `.bytes_of()` on the
