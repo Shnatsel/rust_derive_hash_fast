@@ -8,7 +8,7 @@
 
 This crate is inspired by the [excellent blog post](https://purplesyringa.moe/blog/thoughts-on-rust-hashing/) by [@purplesyringa](https://github.com/purplesyringa) (who is not affiliated with this crate). Check it out for an in-depth exploration of the issues with `#[derive(Hash)]` and the `Hash` trait in general.
 
-We achieve better performance than `[derive(Hash)]` by:
+We achieve better performance than `#[derive(Hash)]` by:
 
 1. Hashing the entire struct at once (as opposed to each field individually)
 1. Dispatching to a sequence of primitive writes such as `hasher.write_u64` which is determined at compile time, padded where necessary (as opposed to using the slow variable-length codepath in the hashers)
