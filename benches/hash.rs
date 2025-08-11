@@ -4,7 +4,7 @@ use derive_hash_fast::*;
 use std::hint::black_box;
 use std::hash::{DefaultHasher, Hash, Hasher};
 
-criterion_group!(benches, bench_compound_struct_64, bench_compound_struct_80, bench_compound_struct_128, bench_compound_struct_160, bench_slice_of_compound_structs, bench_slice_of_u8_newtype);
+criterion_group!(benches, bench_compound_struct_64, bench_compound_struct_80, bench_compound_struct_128, bench_compound_struct_160, bench_slice_of_compound_structs, bench_slice_of_u8_newtype, bench_short_slice_of_u8_newtype);
 criterion_main!(benches);
 
 fn hash_it(value: impl Hash, mut hasher: impl Hasher) -> u64 {
@@ -118,9 +118,26 @@ pub fn bench_slice_of_u8_newtype(c: &mut Criterion) {
 
 pub fn bench_slice_of_u8_newtype_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
     bench_structs_with_hasher(c, 
-        vec![U8NewtypeDerive(5); 1024].as_slice(), "Slice of Newtype(u8) with [derive(Hash)]", 
-        vec![U8NewtypeFastB(5); 1024].as_slice(), "Slice of Newtype(u8) with derive_hash_fast_bytemuck", 
-        vec![U8NewtypeFastZ(5); 1024].as_slice(), "Slice of Newtype(u8) with derive_hash_fast_zerocopy",
+        vec![U8NewtypeDerive(5); 1024].as_slice(), "Slice of Newtype(u8) with [derive(Hash)], length 1024", 
+        vec![U8NewtypeFastB(5); 1024].as_slice(), "Slice of Newtype(u8) with derive_hash_fast_bytemuck, length 1024", 
+        vec![U8NewtypeFastZ(5); 1024].as_slice(), "Slice of Newtype(u8) with derive_hash_fast_zerocopy, length 1024",
+        hasher, hasher_name
+    );
+}
+
+pub fn bench_short_slice_of_u8_newtype(c: &mut Criterion) {
+    bench_short_slice_of_u8_newtype_with_hasher(c, DefaultHasher::default(), "std::hash::DefaultHasher");
+    bench_short_slice_of_u8_newtype_with_hasher(c, rustc_hash::FxHasher::default(), "rustc_hash::FxHasher");
+    bench_short_slice_of_u8_newtype_with_hasher(c, rapidhash::RapidHasher::default(), "rapidhash::RapidHasher");
+    bench_short_slice_of_u8_newtype_with_hasher(c, ahash::AHasher::default(), "ahash::AHasher");
+    bench_short_slice_of_u8_newtype_with_hasher(c, xxhash_rust::xxh3::Xxh3Default::default(), "xxh3::Xxh3Default");
+}
+
+pub fn bench_short_slice_of_u8_newtype_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
+    bench_structs_with_hasher(c, 
+        vec![U8NewtypeDerive(5); 4].as_slice(), "Slice of Newtype(u8) with [derive(Hash)], length 4", 
+        vec![U8NewtypeFastB(5); 4].as_slice(), "Slice of Newtype(u8) with derive_hash_fast_bytemuck, length 4", 
+        vec![U8NewtypeFastZ(5); 4].as_slice(), "Slice of Newtype(u8) with derive_hash_fast_zerocopy, length 4",
         hasher, hasher_name
     );
 }
