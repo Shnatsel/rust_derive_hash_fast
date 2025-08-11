@@ -88,10 +88,25 @@ fn hash_padded_large<const N: usize>(bytes: &[u8; N], state: &mut impl Hasher) {
     for chunk in chunks_iter {
         state.write_u128(u128::from_ne_bytes(chunk.try_into().unwrap()))
     }
-    if ! remainder.is_empty() {
-        let mut padded_bytes = [0u8; core::mem::size_of::<u128>()];
-        padded_bytes[..remainder.len()].copy_from_slice(remainder);
-        state.write_u128(u128::from_ne_bytes(padded_bytes.try_into().unwrap()))
+    // pad to either u64 or u128 to limit the amount of extra work performed
+    // compared to always padding to u128.
+    // We don't want the full write_to_optimal_hasher_function() here
+    // because it regresses performance on the faster hashes,
+    // and only helps really naive implementations like std::DefaultHasher
+    match remainder.len() {
+        0 => (), // nothing to do
+        1..=7 => {
+            let mut padded_bytes = [0u8; core::mem::size_of::<u64>()];
+            padded_bytes[..remainder.len()].copy_from_slice(remainder);
+            state.write_u64(u64::from_ne_bytes(padded_bytes.try_into().unwrap()))
+        }
+        8 => state.write_u64(u64::from_ne_bytes(remainder.try_into().unwrap())),
+        9..=15 => {
+            let mut padded_bytes = [0u8; core::mem::size_of::<u128>()];
+            padded_bytes[..remainder.len()].copy_from_slice(remainder);
+            state.write_u128(u128::from_ne_bytes(padded_bytes.try_into().unwrap()))
+        },
+        SIZEOF_U128.. => unreachable!(),
     }
 }
 
