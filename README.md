@@ -30,11 +30,15 @@ I've published the raw results from a run [here](https://shnatsel.github.io/deri
 
 ### Is this a hash function?
 
-**No.** It's a more efficient way to feed data to your chosen hash function. If you care about performance, you should use a fast hash function *in conjunction* with this crate, since `std::hash::DefaultHasher` is DoS-resistant but slow.
+No.
+
+It's a more efficient way to feed data to your chosen hash function. If you care about performance, you should use a fast hash function *in conjunction* with this crate, since `std::hash::DefaultHasher` is DoS-resistant but slow.
 
 ### Is this ALWAYS faster?
 
-**Almost.** In my benchmarks this approach is faster than `#[derive(Hash)]` across the board, but there is one exception. If you are hashing a very short slice (64 bits or less) and you're using a function with a fast fixed-size path and slow variable-sized path (pretty much only `rustc_hash::FxHasher`), this approach may be slower. This crate is still dramatically faster for structs and longer slices even with `rustc_hash::FxHasher`. Whether this helps or hinders depends on the abundance of short slices in the data you're hashing.
+Almost.
+
+In my benchmarks this approach is faster than `#[derive(Hash)]` across the board, but there is one exception. If you are hashing a very short slice (64 bits or less) and you're using a function with a fast fixed-size path and slow variable-sized path (pretty much only `rustc_hash::FxHasher`), this approach may be slower. This crate is still dramatically faster for structs and longer slices even with `rustc_hash::FxHasher`. Whether this helps or hinders depends on the abundance of short slices in the data you're hashing.
 
 ### Why not improve the Rust compiler?
 
