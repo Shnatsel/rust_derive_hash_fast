@@ -36,6 +36,10 @@ I've published the raw results from a run [here](https://shnatsel.github.io/deri
 
 **Almost.** In my benchmarks this approach is faster than `#[derive(Hash)]` across the board, but there is one exception. If you are hashing a very short slice (64 bits or less) and you're using a function with a fast fixed-size path and slow variable-sized path (pretty much only `rustc_hash::FxHasher`), this approach may be slower. This crate is still dramatically faster for structs and longer slices even with `rustc_hash::FxHasher`. Whether this helps or hinders depends on the abundance of short slices in the data you're hashing.
 
+### Does this work in `#![no_std]`?
+
+Yes. Or it should, anyway. Please open an issue if it doesn't.
+
 ### Why not improve the Rust compiler?
 
 Right now the pass that expands the `#[derive(Hash)]` macro happens before the properties of the type required for this optimization are known. So this would require significant architectural changes.
