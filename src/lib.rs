@@ -1,3 +1,32 @@
+/// Derives a fast `Hash` implementation for `bytemuck` types.
+///
+/// This macro implements [std::hash::Hash] by calling `.bytes_of()` on the
+/// struct, which leverages `bytemuck` to get a byte representation of the
+/// type for hashing.
+///
+/// # Examples
+///
+/// ```
+/// use derive_hash_fast::derive_hash_fast_bytemuck;
+/// use bytemuck::NoUninit;
+///
+/// // Define the struct that we want to hash
+/// #[repr(C)] // required by bytemuck
+/// #[derive(Eq, PartialEq, Clone, Copy, NoUninit)]
+/// struct MyStruct {
+///     a: bool,
+///     b: u8,
+///     c: u16,
+/// }
+///
+/// // Derive the fast Hash implementation
+/// derive_hash_fast_bytemuck!(MyStruct);
+///
+/// // Use the struct in a HashSet
+/// let mut hashset = std::collections::HashSet::new();
+/// hashset.insert(MyStruct{a: true, b: 2, c: 3});
+/// assert!(hashset.contains(&MyStruct{a: true, b: 2, c: 3}));
+/// ```
 #[macro_export]
 macro_rules! derive_hash_fast_bytemuck {
     ($T:ty) => {
@@ -17,6 +46,34 @@ macro_rules! derive_hash_fast_bytemuck {
     };
 }
 
+/// Derives a fast `Hash` implementation for `zerocopy` types.
+///
+/// This macro implements [std::hash::Hash] by calling `.as_bytes()` on the
+/// struct, which leverages `zerocopy` to get a byte representation of the
+/// type for hashing.
+///
+/// # Examples
+///
+/// ```
+/// use derive_hash_fast::derive_hash_fast_zerocopy;
+/// use zerocopy::{Immutable, IntoBytes};
+///
+/// // Define the struct that we want to hash
+/// #[derive(Eq, PartialEq, Immutable, IntoBytes)]
+/// struct MyStruct {
+///     a: bool,
+///     b: u8,
+///     c: u16,
+/// }
+///
+/// // Derive the fast Hash implementation
+/// derive_hash_fast_zerocopy!(MyStruct);
+///
+/// // Use the struct in a HashSet
+/// let mut hashset = std::collections::HashSet::new();
+/// hashset.insert(MyStruct{a: true, b: 2, c: 3});
+/// assert!(hashset.contains(&MyStruct{a: true, b: 2, c: 3}));
+/// ```
 #[macro_export]
 macro_rules! derive_hash_fast_zerocopy {
     ($T:ty) => {
