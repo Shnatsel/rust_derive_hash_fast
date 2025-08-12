@@ -19,7 +19,13 @@ rapidhash = "1.4.0"
 rustc-hash = "2.1.1"
 xxhash-rust = { version = "0.8.15", features = ["xxh3"] }
 criterion = { version = "0.7.0", default-features = false, features = ["cargo_bench_support", "plotters"] }
+arbitrary = { version = "1.4.1", features = ["derive"] }
+fastrand = "2.3.0"
 
 [[bench]]
 name = "hash"
+harness = false
+
+[[bench]]
+name = "hashset"
 harness = false
