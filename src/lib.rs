@@ -1,4 +1,4 @@
-#![cfg_attr(not(test), no_std)]
+#![no_std]
 
 /// Derives a fast `Hash` implementation for `bytemuck` types.
 ///
@@ -171,6 +171,7 @@ fn hash_padded_large<const N: usize>(bytes: &[u8; N], state: &mut impl Hasher) {
 
 #[cfg(test)]
 mod tests {
+    extern crate std;
     use super::*;
 
     #[repr(C)]
