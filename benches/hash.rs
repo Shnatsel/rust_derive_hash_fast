@@ -23,9 +23,9 @@ pub fn bench_compound_struct_64(c: &mut Criterion) {
 
 pub fn bench_compound_struct_64_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
     bench_structs_with_hasher(c, 
-        Compound64Derive {a: true, b: 10, c: 20, d: 'a'}, "Compound 64-bit struct with [derive(Hash)]", 
-        Compound64FastB {a: true, b: 10, c: 20, d: 'a'}, "Compound 64-bit struct with derive_hash_fast_bytemuck", 
-        Compound64FastZ {a: true, b: 10, c: 20, d: 'a'}, "Compound 64-bit struct with derive_hash_fast_zerocopy",
+        compound64::Derive {a: true, b: 10, c: 20, d: 'a'}, "Compound 64-bit struct with [derive(Hash)]", 
+        compound64::FastB {a: true, b: 10, c: 20, d: 'a'}, "Compound 64-bit struct with derive_hash_fast_bytemuck", 
+        compound64::FastZ {a: true, b: 10, c: 20, d: 'a'}, "Compound 64-bit struct with derive_hash_fast_zerocopy",
         hasher, hasher_name
     );
 }
@@ -41,9 +41,9 @@ pub fn bench_compound_struct_80(c: &mut Criterion) {
 
 pub fn bench_compound_struct_80_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
     bench_structs_with_hasher(c, 
-        Compound80Derive {a: true, b: 2, c: 1337, d: 5, e: 69, f: 0xFFF}, "Compound 80-bit struct with [derive(Hash)]", 
-        Compound80FastB {a: true, b: 2, c: 1337, d: 5, e: 69, f: 0xFFF}, "Compound 80-bit struct with derive_hash_fast_bytemuck", 
-        Compound80FastZ {a: true, b: 2, c: 1337, d: 5, e: 69, f: 0xFFF}, "Compound 80-bit struct with derive_hash_fast_zerocopy",
+        compound80::Derive {a: true, b: 2, c: 1337, d: 5, e: 69, f: 0xFFF}, "Compound 80-bit struct with [derive(Hash)]", 
+        compound80::FastB {a: true, b: 2, c: 1337, d: 5, e: 69, f: 0xFFF}, "Compound 80-bit struct with derive_hash_fast_bytemuck", 
+        compound80::FastZ {a: true, b: 2, c: 1337, d: 5, e: 69, f: 0xFFF}, "Compound 80-bit struct with derive_hash_fast_zerocopy",
         hasher, hasher_name
     );
 }
@@ -59,9 +59,9 @@ pub fn bench_compound_struct_128(c: &mut Criterion) {
 
 pub fn bench_compound_struct_128_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
     bench_structs_with_hasher(c, 
-        Compound128Derive {a: 1, b: 2, c: 1337, d: 100500}, "Compound 128-bit struct with [derive(Hash)]", 
-        Compound128FastB {a: 1, b: 2, c: 1337, d: 100500}, "Compound 128-bit struct with derive_hash_fast_bytemuck", 
-        Compound128FastZ {a: 1, b: 2, c: 1337, d: 100500}, "Compound 128-bit struct with derive_hash_fast_zerocopy",
+        compound128::Derive {a: 1, b: 2, c: 1337, d: 100500}, "Compound 128-bit struct with [derive(Hash)]", 
+        compound128::FastB {a: 1, b: 2, c: 1337, d: 100500}, "Compound 128-bit struct with derive_hash_fast_bytemuck", 
+        compound128::FastZ {a: 1, b: 2, c: 1337, d: 100500}, "Compound 128-bit struct with derive_hash_fast_zerocopy",
         hasher, hasher_name
     );
 }
@@ -77,9 +77,9 @@ pub fn bench_compound_struct_160(c: &mut Criterion) {
 
 pub fn bench_compound_struct_160_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
     bench_structs_with_hasher(c, 
-        Compound160Derive {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with [derive(Hash)]", 
-        Compound160FastB {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with derive_hash_fast_bytemuck", 
-        Compound160FastZ {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with derive_hash_fast_zerocopy",
+        compound160::Derive {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with [derive(Hash)]", 
+        compound160::FastB {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with derive_hash_fast_bytemuck", 
+        compound160::FastZ {a: 1, b: 2, c: 1337, d: 100500, e: 30}, "Compound 160-bit struct with derive_hash_fast_zerocopy",
         hasher, hasher_name
     );
 }
@@ -94,9 +94,9 @@ pub fn bench_slice_of_compound_structs(c: &mut Criterion) {
 
 pub fn bench_slice_of_compound_structs_with_hasher(c: &mut Criterion, hasher: impl Hasher + Clone, hasher_name: &str) {
     bench_structs_with_hasher(c, 
-        vec![Compound64Derive {a: true, b: 10, c: 20, d: 'a'}; 1024].as_slice(), "Slice of compound 64-bit structs with [derive(Hash)]", 
-        vec![Compound64FastB {a: true, b: 10, c: 20, d: 'a'}; 1024].as_slice(), "Slice of compound 64-bit structs with derive_hash_fast_bytemuck", 
-        vec![Compound64FastZ {a: true, b: 10, c: 20, d: 'a'}; 1024].as_slice(), "Slice of compound 64-bit structs with derive_hash_fast_zerocopy",
+        vec![compound64::Derive {a: true, b: 10, c: 20, d: 'a'}; 1024].as_slice(), "Slice of compound 64-bit structs with [derive(Hash)]", 
+        vec![compound64::FastB {a: true, b: 10, c: 20, d: 'a'}; 1024].as_slice(), "Slice of compound 64-bit structs with derive_hash_fast_bytemuck", 
+        vec![compound64::FastZ {a: true, b: 10, c: 20, d: 'a'}; 1024].as_slice(), "Slice of compound 64-bit structs with derive_hash_fast_zerocopy",
         hasher, hasher_name
     );
 }
@@ -143,134 +143,100 @@ pub fn bench_structs_with_hasher(c: &mut Criterion, struct_1: impl Hash + Clone,
     group.finish();
 }
 
-#[derive(Hash, Clone)]
-struct Compound64Derive{
-    a: bool,
-    b: u8,
-    c: u16,
-    d: char
+#[macro_export]
+macro_rules! generate_structs {
+    (
+        pub struct $name:ident {
+            $( $field_name:ident : $field_type:ty ),*
+        }
+    ) => {
+        #[derive(Hash, Clone)]
+        pub struct Derive {
+            $( pub $field_name: $field_type ),*
+        }
+
+        #[repr(C)]
+        #[derive(Copy, Clone, bytemuck::NoUninit)]
+        pub struct FastB {
+            $( pub $field_name: $field_type ),*
+        }
+
+        derive_hash_fast::derive_hash_fast_bytemuck!(FastB);
+
+        #[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes)]
+        pub struct FastZ {
+            $( pub $field_name: $field_type ),*
+        }
+
+        derive_hash_fast::derive_hash_fast_zerocopy!(FastZ);
+
+        #[repr(C)]
+        #[derive(Copy, Clone, bytemuck::NoUninit, bytemuck::ByteHash)]
+        pub struct ByteHashB {
+            $( pub $field_name: $field_type ),*
+        }
+
+        #[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes, zerocopy::ByteHash)]
+        pub struct ByteHashZ {
+            $( pub $field_name: $field_type ),*
+        }
+    };
 }
 
-#[repr(C)]
-#[derive(Copy, Clone, bytemuck::NoUninit)]
-struct Compound64FastB{
-    a: bool,
-    b: u8,
-    c: u16,
-    d: char
+mod compound64 {
+    use super::generate_structs;
+
+    generate_structs! {
+        pub struct Compound64 {
+            a: bool,
+            b: u8,
+            c: u16,
+            d: char
+        }
+    }
 }
 
-derive_hash_fast_bytemuck!(Compound64FastB);
+mod compound80 {
+    use super::generate_structs;
 
-
-#[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes)]
-struct Compound64FastZ{
-    a: bool,
-    b: u8,
-    c: u16,
-    d: char
+    generate_structs! {
+        pub struct compound80 {
+            a: bool,
+            b: u8,
+            c: u16,
+            d: u16,
+            e: u16,
+            f: u16
+        }
+    }
 }
 
-derive_hash_fast_zerocopy!(Compound64FastZ);
+mod compound128 {
+    use super::generate_structs;
 
-#[derive(Hash, Clone)]
-struct Compound80Derive{
-    a: bool,
-    b: u8,
-    c: u16,
-    d: u16,
-    e: u16,
-    f: u16,
+    generate_structs! {
+        pub struct Compound128 {
+            a: u32,
+            b: u32,
+            c: u32,
+            d: u32
+        }
+    }
 }
 
-#[repr(C)]
-#[derive(Copy, Clone, bytemuck::NoUninit)]
-struct Compound80FastB{
-    a: bool,
-    b: u8,
-    c: u16,
-    d: u16,
-    e: u16,
-    f: u16,
+mod compound160 {
+    use super::generate_structs;
+
+    generate_structs! {
+        pub struct Compound160 {
+            a: u32,
+            b: u32,
+            c: u32,
+            d: u32,
+            e: u32
+        }
+    }
 }
-
-derive_hash_fast_bytemuck!(Compound80FastB);
-
-
-#[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes)]
-struct Compound80FastZ{
-    a: bool,
-    b: u8,
-    c: u16,
-    d: u16,
-    e: u16,
-    f: u16,
-}
-
-derive_hash_fast_zerocopy!(Compound80FastZ);
-
-#[derive(Hash, Clone)]
-struct Compound128Derive{
-    a: u32,
-    b: u32,
-    c: u32,
-    d: u32,
-}
-
-#[repr(C)]
-#[derive(Copy, Clone, bytemuck::NoUninit)]
-struct Compound128FastB{
-    a: u32,
-    b: u32,
-    c: u32,
-    d: u32,
-}
-
-derive_hash_fast_bytemuck!(Compound128FastB);
-
-
-#[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes)]
-struct Compound128FastZ{
-    a: u32,
-    b: u32,
-    c: u32,
-    d: u32,
-}
-
-derive_hash_fast_zerocopy!(Compound128FastZ);
-
-#[derive(Hash, Clone)]
-struct Compound160Derive{
-    a: u32,
-    b: u32,
-    c: u32,
-    d: u32,
-    e: u32,
-}
-
-#[repr(C)]
-#[derive(Copy, Clone, bytemuck::NoUninit)]
-struct Compound160FastB{
-    a: u32,
-    b: u32,
-    c: u32,
-    d: u32,
-    e: u32,
-}
-
-derive_hash_fast_bytemuck!(Compound160FastB);
-
-
-#[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes)]
-struct Compound160FastZ{
-    a: u32,
-    b: u32,
-    c: u32,
-    d: u32,
-    e: u32,
-}
-
-derive_hash_fast_zerocopy!(Compound160FastZ);
 
 #[derive(Clone, Hash)]
 struct U8NewtypeDerive(u8);
@@ -285,3 +251,10 @@ derive_hash_fast_bytemuck!(U8NewtypeFastB);
 struct U8NewtypeFastZ(u8);
 
 derive_hash_fast_zerocopy!(U8NewtypeFastZ);
+
+#[repr(transparent)]
+#[derive(Copy, Clone, bytemuck::NoUninit, bytemuck::ByteHash)]
+struct U8NewtypeByteHashB(u8);
+
+#[derive(Clone, zerocopy::Immutable, zerocopy::IntoBytes, zerocopy::ByteHash)]
+struct U8NewtypeByteHashZ(u8);
