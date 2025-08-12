@@ -8,16 +8,9 @@ criterion_group!(benches, bench_compound_struct_64, bench_compound_struct_80, be
 criterion_main!(benches);
 
 fn hash_it(value: impl Hash, mut hasher: impl Hasher) -> u64 {
-    // black-box the input and the hasher for accurate measurements.
-    // both of these black_box lines make a huge difference on benchmarks!
-    black_box(&value);
-    black_box(&hasher);
-    // actually hash the value
-    value.hash(&mut hasher);
-    let result = hasher.finish();
-    // black-box the output for accurate measurement
-    black_box(result);
-    result
+    // these black_box calls are load-bearing, the results a very different without them
+    black_box(value).hash(black_box(&mut hasher));
+    black_box(hasher.finish())
 }
 
 pub fn bench_compound_struct_64(c: &mut Criterion) {
