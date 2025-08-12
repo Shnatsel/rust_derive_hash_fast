@@ -1,8 +1,8 @@
-#![cfg_attr(not(test), no_std)]
+#![no_std]
 
 /// Derives a fast `Hash` implementation for `bytemuck` types.
 ///
-/// This macro implements [std::hash::Hash] by calling `.bytes_of()` on the
+/// This macro implements [`core::hash::Hash`] by calling `.bytes_of()` on the
 /// struct, which leverages `bytemuck` to get a byte representation of the
 /// type for hashing.
 ///
@@ -50,7 +50,7 @@ macro_rules! derive_hash_fast_bytemuck {
 
 /// Derives a fast `Hash` implementation for `zerocopy` types.
 ///
-/// This macro implements [std::hash::Hash] by calling `.as_bytes()` on the
+/// This macro implements [`core::hash::Hash`] by calling `.as_bytes()` on the
 /// struct, which leverages `zerocopy` to get a byte representation of the
 /// type for hashing.
 ///
@@ -171,6 +171,7 @@ fn hash_padded_large<const N: usize>(bytes: &[u8; N], state: &mut impl Hasher) {
 
 #[cfg(test)]
 mod tests {
+    extern crate std;
     use super::*;
 
     #[repr(C)]
