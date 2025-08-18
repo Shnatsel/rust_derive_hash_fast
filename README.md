@@ -14,6 +14,12 @@ We achieve better performance than `#[derive(Hash)]` by:
 1. Dispatching to a sequence of primitive writes such as `hasher.write_u64` which is determined at compile time, padded where necessary (as opposed to using the slow variable-length codepath in the hashers)
 1. Replicating the optimization `std` performs for `u8` and other primitive types in slices, so that e.g. `&[MyType(u8)]` can he hashed as fast as `&[u8]`. This applies to structs with multiple fields as well.
 
+## Alternatives
+
+`bytemuck` and `zerocopy` crates provide their own implementations of this idea as `#[derive(ByteHash)]`. They employ fewer micro-optimizations, but their performance when used in a `HashSet` is mostly identical to this crate, and the difference can go either way based on the chosen hash function.
+
+Therefore, it is recommended to try `#[derive(ByteHash)]` first to avoid additional dependencies, and only switch to this crate if it improves your project's benchmarks.
+
 ## Usage
 
 For using the crate with `zerocopy` (recommended), see [the docs on `derive_hash_fast_zerocopy!`](https://docs.rs/derive_hash_fast/latest/derive_hash_fast/macro.derive_hash_fast_zerocopy.html)
