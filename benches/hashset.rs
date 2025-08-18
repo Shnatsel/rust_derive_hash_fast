@@ -9,12 +9,6 @@ use std::hash::{BuildHasherDefault, DefaultHasher, Hash, Hasher};
 criterion_group!(benches, bench_compound_struct_64, bench_compound_struct_80, bench_compound_struct_128, bench_compound_struct_160);
 criterion_main!(benches);
 
-fn hash_it(value: impl Hash, mut hasher: impl Hasher) -> u64 {
-    // these black_box calls are load-bearing, the results a very different without them
-    black_box(value).hash(black_box(&mut hasher));
-    black_box(hasher.finish())
-}
-
 pub fn bench_compound_struct_64(c: &mut Criterion) {
     bench_compound_struct_64_with_hasher(c, DefaultHasher::default(), "std::hash::DefaultHasher");
     bench_compound_struct_64_with_hasher(c, rustc_hash::FxHasher::default(), "rustc_hash::FxHasher");
