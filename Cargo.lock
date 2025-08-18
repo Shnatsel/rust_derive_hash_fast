@@ -198,7 +198,7 @@ dependencies = [
 
 [[package]]
 name = "derive_hash_fast"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "ahash",
  "arbitrary",
